@@ -29,7 +29,7 @@ Goals:
 
        RLV  - READ WRITE
 
-       PGMF - READ
+       PGMF - READ WRITE
 
        TTS  - READ
 
@@ -39,9 +39,9 @@ Goals:
 
 2) Allow files to be blended into a single representation, then exported:
 
-   For example to read a complete tts and output it as separate gpx and rlv file you can do:
+   For example to read a complete tts and output it as separate pgmf and rlv file you can do:
 
-     morphsat.exe -i t.tts -o t.gpx -o t.rlv
+     morphsat.exe -i t.tts -o t.pgmf -o t.rlv
 
    Similarly you can import multiple files and output them as one:
 
