@@ -1,4 +1,4 @@
-MorphSat - Morphism through constraint Satisfation V0.13
+MorphSat - Morphism through constraint Satisfation V0.14
 
 Eric Christoffersen - 2024.
 
@@ -62,6 +62,62 @@ Current state:
                  Temp:         None  |   None
               Cadence:         None  |   None
 
+  -- Merge command:
+
+       Interpolating merge.
+
+       First file input (-i) is considered the merge primary. All subsequent files are merged
+       onto the primary using a common basis.
+
+       If both files have time then time is used, otherwise if both files have time then time
+       is used.
+
+       If time or distance cannot be used as a common basis then the secondary file is resampled
+       to match primary point count, then values are copied across.
+
+       Fields that exist in the primary will not be overwritten, with exception of Altitude:
+         if primary has altitude and not location, and other has location and altitude, then
+         location and altitude will be interpolated onto primary. Is assumed that altitude
+         in primary was derived from gradient.
+
+       Example:
+
+        To merge a gpx track onto a time/gradient tts file, and output the combined data
+        as a json, you can do:
+
+          morphsat.exe -i f.tts -i f.gpx -merge -o f.json
+
+            read file:     f.tts     0:  f.tts - 1970-01-01T00:00:00Z (1124)    54050.7m                6780s
+            read file:     f.gpx     1:  f.gpx - 1970-01-01T00:00:00Z (8412)      53624m                   0s
+              INTERPOLATING MERGE of data from file 1 onto data from file 0 - SUCCESS
+            file written: f.json     0: f.json - 1970-01-01T00:00:00Z (1124)    54050.7m (   100%)      6780s(   100%)
+
+          morphsat.exe -i f.tts -i f.gpx -i f.json -c
+
+            read file:     f.tts     0:  f.tts - 1970-01-01T00:00:00Z (1124)    54050.7m                6780s
+            read file:     f.gpx     1:  f.gpx - 1970-01-01T00:00:00Z (8412)      53624m                   0s
+            read file:    f.json     2: f.json - 1970-01-01T00:00:00Z (1124)    54050.7m                6780s
+            Comparing WorkoutFiles:
+                 0:  f.tts - 1970-01-01T00:00:00Z (1124)    54050.7m                6780s
+                 1:  f.gpx - 1970-01-01T00:00:00Z (8412)      53624m                   0s
+                 2: f.json - 1970-01-01T00:00:00Z (1124)    54050.7m                6780s
+            Available Field Comparison
+                                    0  |      1  |      2
+                  Grade:          All  |   None  |   None
+                  Watts:         None  |   None  |   None
+               Distance:          All  |    All  |    All
+                    Lat:         None  |    All  |    All
+                    Lon:         None  |    All  |    All
+                    Alt:          All  |    All  |    All
+                  Speed:         None  |   None  |   None
+                     HR:         None  |   None  |   None
+                   Time:          All  |   None  |   None
+              MediaTime:          All  |   None  |    All
+                   Temp:         None  |   None  |   None
+                Cadence:         None  |   None  |   None
+
+              track point count difference comparing 0 and 1:-7288
+
   -- Resample command:
 
        Resamples all input files with given number of samples.
@@ -113,12 +169,8 @@ Point here is that if you throw away data by downsampling it likely won't be rec
 
 Future Stuffs:
 
-   Merge: merge multiple input files (with automatic resample.)
+   Rescale distance and/or time within regions of loaded file, this can be used to synchronize workout tracks with video.
 
-     morphsat.exe -i t.pgmf -i t.rlv -m -o t.json
-
-   Rescale distance and time within regions of loaded file, this can be used to synchronize workout tracks with video.
-
-   Gps track smoothing.
+   Various smoothing and outlier removal.
 
    Calculate and print workout statistics.
