@@ -1,4 +1,4 @@
-MorphSat - Morphism through constraint Satisfation V0.14
+MorphSat - Morphism through constraint Satisfation V0.15
 
 Eric Christoffersen - 2024.
 
